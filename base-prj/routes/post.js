@@ -64,6 +64,21 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
   }
 });
 
+router.delete('/:id', isLoggedIn, async (req, res, next) => {
+    try {
+      const result = await Post.update({
+        flag: false,
+        deletedAt: new Date(),
+      }, {
+        where: { id: req.params.id },
+      });
+      res.json(result);
+    } catch (err) {
+      console.error(err);
+      next(err);
+    }
+});
+
 router.get('/:id/comments', async (req, res, next) => {
   try {
     const post = await Post.findOne({ where: { id: req.params.id } });
@@ -114,6 +129,29 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => {
   } catch (err) {
     console.error(err);
     next(err);
+  }
+});
+
+router.post('/:id/like', async (req, res, next) => {
+  try{
+    const post = await Post.findOne({ where: { id: req.params.id }});
+    console.log(post);
+    await post.addLiker(req.user.id);
+    res.send ('success');
+  } catch{
+    console.error(error);
+    next(error);
+  }
+});
+
+router.delete('/:id/like', async (req, res, next) => {
+  try{
+    const post = await Post.findOne({ where: { UserId: req.params.id }});
+    await post.removeLiker (req.user.id);
+    res.send('success');
+  } catch{
+    console.error(error);
+    next(error);
   }
 });
 
