@@ -43,18 +43,25 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/hashtag', async (req, res, next) => {
-  const query = req.query.hashtag;
+router.get('/search', async (req, res, next) => {
+  let query = req.query.search;
+  if(query.match(/@/)) {
+    query = query.replace("@", "");
+  }
   if (!query) {
     return res.redirect('/');
   }
   try {
     const hashtag = await Hashtag.findOne({ where: { title: query } });
+    const user = await User.findOne({ where: { nick: query } })
     let posts = [];
+
     if (hashtag) {
       posts = await hashtag.getPosts({ include: [{ model: User }] });
     }
-
+    else if(user) {
+      posts = await user.getPosts({ include: [{ model: User }] });
+    }
     return res.render('main', {
       title: `${query} | prj-name`,
       twits: posts,
