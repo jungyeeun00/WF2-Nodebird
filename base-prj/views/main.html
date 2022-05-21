@@ -21,8 +21,8 @@
         </div>
       {% endif %}
       <div class="twits">
-        <form id="hashtag-form" action="/hashtag">
-          <input type="text" name="hashtag" placeholder="태그 검색">
+        <form id="search-form" action="/search">
+          <input type="text" name="search" placeholder="아이디/태그 검색">
           <button class="btn">검색</button>
         </form>
         {% for twit in twits %}
@@ -37,6 +37,7 @@
             {% if twit.img %}
               <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
             {% endif %}
+            <input type="button" onClick="shareKakaotalk();" value="공유"/>
           </div>
         {% endfor %}
       </div>
