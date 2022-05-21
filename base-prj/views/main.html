@@ -26,7 +26,7 @@
       <button class="btn">검색</button>
     </form>
     {% for twit in twits %}
-    <div class="twit" onclick="location.href='{{twit.id}}';">
+    <div class="twit" onclick="location.href='/post/{{twit.id}}';">
       <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
       <input type="hidden" value="{{twit.id}}" class="twit-id">
       <div class="twit-author">{{twit.User.nick}}</div>
