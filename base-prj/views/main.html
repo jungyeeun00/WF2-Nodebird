@@ -37,6 +37,9 @@
       <button class="twit-unfollow">팔로우취소하기</button>
       {% endif %}
       {% if twit.User.id === user.id %}
+      <button class="twit-edit">수정하기</button>
+      {% endif %}
+      {% if twit.User.id === user.id %}
       <button class="twit-delete">삭제하기</button>
       {% endif %}
       <div class="twit-content">{{twit.content}}</div>
@@ -82,6 +85,22 @@
               console.error(err);
             });
         }
+      }
+    });
+  });
+  document.querySelectorAll('.twit-edit').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id');
+      if (myId) {
+        const userId = tag.parentNode.querySelector('.twit-user-id').value;
+        const twitId = tag.parentNode.querySelector('.twit-id').value;
+        axios.delete(`/post/${twitId}`)
+          .then(() => {
+            location.reload();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       }
     });
   });
