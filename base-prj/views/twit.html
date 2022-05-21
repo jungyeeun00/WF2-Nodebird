@@ -1,7 +1,6 @@
 <html>
     <body>
-        <div class="timeline">
-            <div class="twit">
+        <div class="twit">
                 <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
                 <input type="hidden" value="{{twit.id}}" class="twit-id">
                 <div class="twit-author">{{twit.User.nick}}</div>
@@ -12,7 +11,6 @@
                 {% if twit.img %}
                 <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
                 {% endif %}
-            </div>
         </div>
     </body>
 </html>
