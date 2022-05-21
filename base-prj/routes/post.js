@@ -117,4 +117,27 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.post('/:id/like', async (req, res, next) => {
+  try{
+    const post = await Post.findOne({ where: { id: req.params.id }});
+    console.log(post);
+    await post.addLiker(req.user.id);
+    res.send ('success');
+  } catch{
+    console.error(error);
+    next(error);
+  }
+});
+
+router.delete('/:id/like', async (req, res, next) => {
+  try{
+    const post = await Post.findOne({ where: { UserId: req.params.id }});
+    await post.removeLiker (req.user.id);
+    res.send('success');
+  } catch{
+    console.error(error);
+    next(error);
+  }
+});
+
 module.exports = router;
