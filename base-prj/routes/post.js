@@ -7,7 +7,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Post, Hashtag } = require('../models');
+const { Post, Hashtag, Comment } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
@@ -61,6 +61,59 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
   } catch (error) {
     console.error(error);
     next(error);
+  }
+});
+
+router.get('/:id/comments', async (req, res, next) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.params.id } });
+    if (!post) return res.status(404).send('포스트가 존재하지 않습니다.');
+    const comments = await Comment.findAll({
+      where: {
+        PostId: req.params.id,
+      },
+      include: {
+        model: User,
+        attributes: ['id', 'nick'],
+      },
+      order: [['createdAt', 'DESC']],
+    });
+    res.render('main', {
+      title: 'prj-name',
+      twits: comments,
+    });
+
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
+router.post('/:id/comment', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.params.id } });
+    if (!post) return res.status(404).send('포스트가 존재하지 않습니다.');
+    const newComment = await Comment.create({
+      PostId: req.params.id,
+      UserId: req.user.id,
+      content: req.body.content,
+    });
+    const comment = await Comment.findOne({
+      where: {
+        id: newComment.id,
+      },
+      include: {
+        model: User,
+        attributes: ['id', 'nick'],
+      },
+    });
+    res.render('main', {
+      title: 'prj-name',
+      twits: comment,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 });
 

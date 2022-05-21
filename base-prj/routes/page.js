@@ -43,6 +43,25 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/:id', async (req, res, next) => {
+  try {
+    const post = await Post.findOne({
+      include: {
+        model: User,
+        attributes: ['id', 'nick'],
+      },
+    });
+    res.render('twit', {
+      title: 'prj-name',
+      twit: post,
+    });
+    console.log(post);
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
 router.get('/hashtag', async (req, res, next) => {
   const query = req.query.hashtag;
   if (!query) {

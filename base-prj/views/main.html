@@ -80,5 +80,19 @@
         }
       });
     });
+    document.querySelectorAll('.twit').forEach(function (tag) {
+        tag.addEventListener('click', function () {
+        const postId = tag.parentNode.querySelector('.twit-id').value;
+        if (postId) {
+          axios.get(`/${postId}`)
+            .then(() => {
+              location.reload();
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
+      });
+    });
   </script>
 {% endblock %}
