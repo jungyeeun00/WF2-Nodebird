@@ -28,10 +28,16 @@ router.get('/join', isNotLoggedIn, (req, res) => {
 router.get('/', async (req, res, next) => {
   try {
     const posts = await Post.findAll({
-      include: {
+      include: [{
         model: User,
         attributes: ['id', 'nick'],
       },
+      {
+        model: User,
+        attributes: ['id', 'nick'],
+        as: 'Liker'
+      },
+    ],
       where: {
         flag: true,
       },
