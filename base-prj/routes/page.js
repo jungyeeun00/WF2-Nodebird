@@ -46,6 +46,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const post = await Post.findOne({
+      where: { id: req.params.id },
       include: {
         model: User,
         attributes: ['id', 'nick'],
@@ -55,7 +56,7 @@ router.get('/:id', async (req, res, next) => {
       title: 'prj-name',
       twit: post,
     });
-    console.log(post);
+    console.log(post.id, "...............");
   } catch (err) {
     console.error(err);
     next(err);
