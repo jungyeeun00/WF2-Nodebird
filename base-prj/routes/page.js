@@ -53,7 +53,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/post/:id', async (req, res, next) => {
   try {
     const post = await Post.findOne({
       where: { id: req.params.id },
@@ -66,21 +66,30 @@ router.get('/:id', async (req, res, next) => {
       title: 'prj-name',
       twit: post,
     });
-    console.log(post.id, "...............");
   } catch (err) {
     console.error(err);
     next(err);
   }
 });
 
-router.get('/hashtag', async (req, res, next) => {
-  const query = req.query.hashtag;
+router.get('/search', async (req, res, next) => {
+  let query = req.query.search;
+ 
   if (!query) {
     return res.redirect('/');
   }
   try {
-    const hashtag = await Hashtag.findOne({ where: { title: query } });
-    const user = await User.findOne({ where: { nick: query } })
+    let hashtag;
+    let user;
+
+    if(query.match(/@/)) {
+        query = query.replace("@", "");
+        user = await User.findOne({ where: { nick: query } })
+      }
+      else {
+        hashtag = await Hashtag.findOne({ where: { title: query } });
+      }
+    console.log(user + hashtag);
     let posts = [];
 
     if (hashtag) {
