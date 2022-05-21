@@ -37,49 +37,84 @@
             {% if twit.img %}
               <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
             {% endif %}
+            {% if not likerIdList.includes(user.id) and twit %}
+            <button class="twit-like">좋아요</button>
+            {% else %}
+            <button class="twit-unlike">좋아요 취소</button>
             <input type="button" onClick="shareKakaotalk();" value="공유"/>
           </div>
         {% endfor %}
-      </div>
-    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block script %}
-  <script>
-    if (document.getElementById('img')) {
-      document.getElementById('img').addEventListener('change', function(e) {
-        const formData = new FormData();
-        console.log(this, this.files);
-        formData.append('img', this.files[0]);
-        axios.post('/post/img', formData)
-          .then((res) => {
-            document.getElementById('img-url').value = res.data.url;
-            document.getElementById('img-preview').src = res.data.url;
-            document.getElementById('img-preview').style.display = 'inline';
+<script>
+  if (document.getElementById('img')) {
+    document.getElementById('img').addEventListener('change', function (e) {
+      const formData = new FormData();
+      console.log(this, this.files);
+      formData.append('img', this.files[0]);
+      axios.post('/post/img', formData)
+        .then((res) => {
+          document.getElementById('img-url').value = res.data.url;
+          document.getElementById('img-preview').src = res.data.url;
+          document.getElementById('img-preview').style.display = 'inline';
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    });
+  }
+  document.querySelectorAll('.twit-follow').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id');
+      if (myId) {
+        const userId = tag.parentNode.querySelector('.twit-user-id').value;
+        if (userId !== myId.value) {
+          if (confirm('팔로잉하시겠습니까?')) {
+            axios.post(`/user/${userId}/follow`)
+              .then(() => {
+                location.reload();
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }
+        }
+      }
+    });
+  });
+  document.querySelectorAll('.twit-like').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id');
+      if (myId) {
+        const twitId = tag.parentNode.querySelector('.twit-id').value;
+        axios.post(`/user/${twitId}/like`)
+          .then(() => {
+            location.reload();
+          })
+          .catch((err) => {
+            console.log('여기임')
+            console.error(err);
+          });
+      }
+    });
+  });
+  document.querySelectorAll('.twit-unlike').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id');
+      if (myId) {
+        const twitId = tag.parentNode.querySelector('.twit-id').value;
+        axios.delete(`/user/${twitId}/like`)
+          .then(() => {
+            location.reload();
           })
           .catch((err) => {
             console.error(err);
           });
-      });
-    }
-    document.querySelectorAll('.twit-follow').forEach(function(tag) {
-      tag.addEventListener('click', function() {
-        const myId = document.querySelector('#my-id');
-        if (myId) {
-          const userId = tag.parentNode.querySelector('.twit-user-id').value;
-          if (userId !== myId.value) {
-            if (confirm('팔로잉하시겠습니까?')) {
-              axios.post(`/user/${userId}/follow`)
-                .then(() => {
-                  location.reload();
-                })
-                .catch((err) => {
-                  console.error(err);
-                });
-            }
-          }
-        }
-      });
+      }
     });
-  </script>
+  });
+</script>
 {% endblock %}
