@@ -166,8 +166,7 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => {
 router.post('/:id/like', async (req, res, next) => {
   try{
     const post = await Post.findOne({ where: { id: req.params.id }});
-    console.log(post);
-    await post.addLiker(req.user.id);
+    await post.addLiker(req.user.id); //comment처럼 테이블 만들기
     res.send ('success');
   } catch{
     console.error(error);
