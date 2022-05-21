@@ -7,7 +7,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Post, Hashtag } = require('../models');
+const { Post, Hashtag, Comment } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
@@ -109,5 +109,81 @@ router.route('/:id')
       next(err);
     }
   });
+
+router.get('/:id/comments', async (req, res, next) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.params.id } });
+    if (!post) return res.status(404).send('포스트가 존재하지 않습니다.');
+    const comments = await Comment.findAll({
+      where: {
+        PostId: req.params.id,
+      },
+      include: {
+        model: User,
+        attributes: ['id', 'nick'],
+      },
+      order: [['createdAt', 'DESC']],
+    });
+    res.render('main', {
+      title: 'prj-name',
+      twits: comments,
+    });
+
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
+router.post('/:id/comment', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.params.id } });
+    if (!post) return res.status(404).send('포스트가 존재하지 않습니다.');
+    const newComment = await Comment.create({
+      PostId: req.params.id,
+      UserId: req.user.id,
+      content: req.body.content,
+    });
+    const comment = await Comment.findOne({
+      where: {
+        id: newComment.id,
+      },
+      include: {
+        model: User,
+        attributes: ['id', 'nick'],
+      },
+    });
+    res.render('main', {
+      title: 'prj-name',
+      twits: comment,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+
+router.post('/:id/like', async (req, res, next) => {
+  try{
+    const post = await Post.findOne({ where: { id: req.params.id }});
+    console.log(post);
+    await post.addLiker(req.user.id);
+    res.send ('success');
+  } catch{
+    console.error(error);
+    next(error);
+  }
+});
+
+router.delete('/:id/like', async (req, res, next) => {
+  try{
+    const post = await Post.findOne({ where: { UserId: req.params.id }});
+    await post.removeLiker (req.user.id);
+    res.send('success');
+  } catch{
+    console.error(error);
+    next(error);
+  }
+});
 
 module.exports = router;

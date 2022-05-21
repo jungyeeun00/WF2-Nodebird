@@ -21,8 +21,8 @@
   </div>
   {% endif %}
   <div class="twits">
-    <form id="hashtag-form" action="/hashtag">
-      <input type="text" name="hashtag" placeholder="태그 검색">
+    <form id="search-form" action="/search">
+      <input type="text" name="search" placeholder="아이디/태그 검색">
       <button class="btn">검색</button>
     </form>
     {% for twit in twits %}
@@ -30,14 +30,11 @@
       <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
       <input type="hidden" value="{{twit.id}}" class="twit-id">
       <div class="twit-author">{{twit.User.nick}}</div>
-      {% if user and not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
+      {% if not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
       <button class="twit-follow">팔로우하기</button>
       {% endif %}
       {% if user and followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
       <button class="twit-unfollow">팔로우취소하기</button>
-      {% endif %}
-      {% if twit.User.id === user.id %}
-      <button class="twit-edit">수정하기</button>
       {% endif %}
       {% if twit.User.id === user.id %}
       <button class="twit-delete">삭제하기</button>
@@ -46,11 +43,17 @@
       {% if twit.img %}
       <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
       {% endif %}
+      {% if not likerIdList.includes(user.id) and twit %}
+      <button class="twit-like">좋아요</button>
+      {% else %}
+      <button class="twit-unlike">좋아요 취소</button>
+      {% endif %}
+      <input type="button" onClick="shareKakaotalk();" value="공유" />
     </div>
     {% endfor %}
   </div>
-</div>
-{% endblock %}
+  </div>
+  {% endblock %}
 
 {% block script %}
 <script>
@@ -139,6 +142,54 @@
               });
           }
         }
+      }
+    });
+  });
+
+  document.querySelectorAll('.twit-like').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id');
+      if (myId) {
+        const twitId = tag.parentNode.querySelector('.twit-id').value;
+        axios.post(`/user/${twitId}/like`)
+          .then(() => {
+            location.reload();
+          })
+          .catch((err) => {
+            console.log('여기임')
+            console.error(err);
+          });
+      }
+    })
+  });
+  
+  // document.querySelectorAll('.twit').forEach(function (tag) {
+  //     tag.addEventListener('click', function () {
+  //     const postId = tag.parentNode.querySelector('.twit-id').value;
+  //     if (postId) {
+  //       axios.get(`/${postId}`)
+  //         .then(() => {
+  //           location.reload();
+  //         })
+  //         .catch((err) => {
+  //           console.error(err);
+  //         });
+  //     }
+  //   });
+  // });
+
+  document.querySelectorAll('.twit-unlike').forEach(function (tag) {
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id');
+      if (myId) {
+        const twitId = tag.parentNode.querySelector('.twit-id').value;
+        axios.delete(`/user/${twitId}/like`)
+          .then(() => {
+            location.reload();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       }
     });
   });
