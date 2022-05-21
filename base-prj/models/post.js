@@ -14,6 +14,10 @@ module.exports = class Post extends Sequelize.Model {
       img: {
         type: Sequelize.STRING(200),
         allowNull: true,
+      },
+      flag: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
       }
     }, {
       sequelize,
@@ -21,7 +25,7 @@ module.exports = class Post extends Sequelize.Model {
       underscored: false,
       modelName: 'Post',
       tableName: 'posts',
-      paranoid: false,
+      paranoid: true,
       charset: 'utf8mb4',
       collate: 'utf8mb4_general_ci',
     });

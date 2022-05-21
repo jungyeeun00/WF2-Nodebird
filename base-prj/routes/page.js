@@ -32,6 +32,9 @@ router.get('/', async (req, res, next) => {
         model: User,
         attributes: ['id', 'nick'],
       },
+      where: {
+        flag: true,
+      },
       {
         model:User,
         attributes: ['id', 'nick'],
