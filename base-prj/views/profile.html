@@ -18,5 +18,14 @@
         {% endfor %}
       {% endif %}
     </div>
+    <div class="like-list">
+      <h2>좋아요한 목록</h2>
+      {% for like in likes %}
+      <div class="twit-content" onclick="location.href='/post/{{like.id}}';">{{like.content}}</div>
+      {% if like.img %}
+      <div class="twit-img"><img src="{{like.img}}" alt="섬네일"></div>
+      {% endif %}
+      {% endfor %}
+    </div>
   </div>
 {% endblock %}

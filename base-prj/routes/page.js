@@ -17,8 +17,19 @@ router.use((req, res, next) => {
   next();
 });
 
-router.get('/profile', isLoggedIn, (req, res) => {
-  res.render('profile', { title: 'Profile - prj-name' });
+router.get('/profile', isLoggedIn, async (req, res, next) => {
+  try{
+    like = await User.findOne({where: { id : req.user.id }})
+    console.log('like'+like.id);
+    likes = await like.getLikes()
+    res.render('profile', {
+      title: 'prj-name',
+      likes: likes,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 });
 
 router.get('/join', isNotLoggedIn, (req, res) => {
@@ -43,6 +54,7 @@ router.get('/', async (req, res, next) => {
       },
       order: [['createdAt', 'DESC']],
     });
+    console.log('list : '+posts[0].Liker[0])
     res.render('main', {
       title: 'prj-name',
       twits: posts,

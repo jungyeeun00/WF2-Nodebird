@@ -176,7 +176,7 @@ router.post('/:id/like', async (req, res, next) => {
 
 router.delete('/:id/like', async (req, res, next) => {
   try{
-    const post = await Post.findOne({ where: { UserId: req.params.id }});
+    const post = await Post.findOne({ where: { id: req.params.id }});
     await post.removeLiker (req.user.id);
     res.send('success');
   } catch{
