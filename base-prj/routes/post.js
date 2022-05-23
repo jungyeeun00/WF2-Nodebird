@@ -138,7 +138,7 @@ router.get('/:id', async (req, res, next) => {
       },
       order: [['createdAt', 'DESC']],
     });
-    res.render('twit', {
+    res.render('detail', {
       title: 'prj-name',
       twit: post,
       comments: comments
