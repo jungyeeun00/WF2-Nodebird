@@ -26,12 +26,12 @@
       <button class="btn">검색</button>
     </form>
     {% for twit in twits %}
-    <div class="twit" onclick="location.href='{{twit.id}}';">
+    <div class="twit">
       <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
       <input type="hidden" value="{{twit.id}}" class="twit-id">
       <div class="twit-author">{{twit.User.nick}}</div>
       {% if not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
-      <button class="twit-follow">팔로우하기</button>
+      <button class="twit-follow" >팔로우하기</button>
       {% endif %}
       {% if user and followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
       <button class="twit-unfollow">팔로우취소하기</button>
@@ -39,10 +39,12 @@
       {% if twit.User.id === user.id %}
       <button class="twit-delete">삭제하기</button>
       {% endif %}
+      <div onclick="location.href='/post/{{twit.id}}';">
       <div class="twit-content">{{twit.content}}</div>
       {% if twit.img %}
       <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
       {% endif %}
+      </div>
       {% if not likerIdList.includes(user.id) and twit %}
       <button class="twit-like">좋아요</button>
       {% else %}
