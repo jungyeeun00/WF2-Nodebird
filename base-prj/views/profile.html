@@ -2,29 +2,61 @@
 
 {% block content %}
   <div class="timeline">
-    <div class="followings half">
-      <h2>팔로잉 목록</h2>
-      {% if user.Followings %}
-        {% for following in user.Followings %}
-          <div>{{following.nick}}</div>
-        {% endfor %}
-      {% endif %}
-    </div>
-    <div class="followers half">
-      <h2>팔로워 목록</h2>
-      {% if user.Followers %}
-        {% for follower in user.Followers %}
-          <div>{{follower.nick}}</div>
-        {% endfor %}
-      {% endif %}
-    </div>
-    <div class="like-list">
-      <h2>좋아요한 목록</h2>
+    <div class="profile-tabs">
+      <div class="nav-tabs-navigation">
+          <div class="nav-tabs-wrapper">
+              <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+                  <li class="active"><a href="#follows" data-toggle="tab">Following</a></li>
+                  <li><a href="#following" data-toggle="tab">Follower</a></li>
+<!--                                 <li><a href="#following" data-toggle="tab">Following</a></li> -->
+              </ul>
+          </div>
+      </div>
+      <div id="my-tab-content" class="tab-content">
+          <div class="tab-pane active" id="follows">
+              <div class="row">
+                  <div class="col-md-6 col-md-offset-3">
+                      <ul class="list-unstyled follows">
+                        {% if user.Followings %}
+                        {% for following in user.Followings %}
+                        <li>
+                          <h6>{{following.nick}}</h6>
+                        </li>
+                        <hr />
+                        {% endfor %}
+                        {% endif %} 
+                      </ul>
+                  </div>
+              </div>
+          </div>
+          <div class="tab-pane text-center" id="following">
+            <div class="row">
+              <div class="col-md-6 col-md-offset-3">
+                <ul class="list-unstyled follows">
+                  {% if user.Followers %}
+                  {% for follower in user.Followers %}
+                  <li>
+                    <h6>{{follower.nick}}</h6>
+                  </li>
+                  <hr />
+                  {% endfor %}
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>  
+  <div class="like-list">
+      <h4>Likes</h4>
       {% for like in likes %}
-      <div class="twit-content" onclick="location.href='/post/{{like.id}}';">{{like.content}}</div>
-      {% if like.img %}
-      <div class="twit-img"><img src="{{like.img}}" alt="섬네일"></div>
-      {% endif %}
+      <div class="twit">
+        <div class="twit-author">{{like.User.nick}}</div>
+        <div class="twit-content" onclick="location.href='/post/{{like.id}}';">{{like.content}}</div>
+        {% if like.img %}
+        <div class="twit-img"><img src="{{like.img}}" alt="섬네일"></div>
+        {% endif %}
+      </div>
       {% endfor %}
     </div>
   </div>
