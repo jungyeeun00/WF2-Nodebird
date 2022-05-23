@@ -4,7 +4,8 @@
 
 const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
-const { Post, User, Hashtag } = require('../models');
+const { Post, User, Follow, Hashtag } = require('../models');
+const { Op } = require("sequelize");
 
 const router = express.Router();
 
@@ -14,18 +15,19 @@ router.use((req, res, next) => {
   res.locals.followingCount = req.user ? req.user.Followings.length : 0;
   res.locals.followerIdList = req.user ? req.user.Followings.map(f => f.id) : [];
   res.locals.likerIdList = req.user ? req.user.Liked.map(f => f.id) : [];
-  console.log("!!! " +  res.locals.likerIdList)
   next();
 });
 
 router.get('/profile', isLoggedIn, async (req, res, next) => {
-  try{
+  try {
+    const suggestions = await User.findAll();
     like = await User.findOne({where: { id : req.user.id }})
     console.log('~~like'+like.id);
-    likes = await like.getLikes()
+    likes = await like.getLiked()
     res.render('profile', {
       title: 'prj-name',
       likes: likes,
+      suggestions: suggestions,
     });
   } catch (err) {
     console.log(err);
@@ -39,6 +41,7 @@ router.get('/join', isNotLoggedIn, (req, res) => {
 
 router.get('/', async (req, res, next) => {
   try {
+    const suggestions = await User.findAll();
     const posts = await Post.findAll({
       include: [{
         model: User,
@@ -60,15 +63,16 @@ router.get('/', async (req, res, next) => {
     res.render('main', {
       title: 'prj-name',
       twits: posts,
+      suggestions: suggestions,
     });
   } catch (err) {
     console.error(err);
     next(err);
   }
- 
 });
 
 router.get('/search', async (req, res, next) => {
+  const suggestions = await User.findAll();
   let query = req.query.search;
  
   if (!query) {
@@ -97,6 +101,7 @@ router.get('/search', async (req, res, next) => {
     return res.render('main', {
       title: `${query} | prj-name`,
       twits: posts,
+      suggestions: suggestions,
     });
   } catch (error) {
     console.error(error);
