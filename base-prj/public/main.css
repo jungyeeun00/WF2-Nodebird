@@ -137,3 +137,45 @@ footer { text-align: center; }
 .list-unstyled{
   text-align: center;
 }
+.twit-container{
+  display: flex;
+}
+.detail-container{
+  margin: 25px auto;
+  width: 700px;
+}
+.detail-content, .new-comment{
+  border-top: 2px solid #8ECFD5;
+  border-bottom: 2px solid #8ECFD5;
+  padding: 10px 20px;
+}
+.new-comment{
+  margin: 15px 0;
+}
+.author-detail{
+  padding-top: 5px;
+  padding-bottom: 10px;
+  color: black;
+}
+.content-detail, .img-detail{
+  padding: 20px 0;
+  margin: 0;
+}
+.img-detail{
+  display: flex;
+}
+.img-detail-src{
+  margin: auto;
+  width: 95%;
+}
+#comment-textarea{
+  width: 88%;
+  min-height: 72px;
+}
+#comment-btn{
+  float: right;
+}
+.comment-author{
+  font-size: 14px;
+  color: black;
+}
