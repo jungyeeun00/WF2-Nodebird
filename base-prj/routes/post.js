@@ -64,51 +64,60 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
   }
 });
 
-// router.delete('/:id', isLoggedIn, async (req, res, next) => {
-//     try {
-//       const result = await Post.update({
-//         flag: false,
-//         deletedAt: new Date(),
-//       }, {
-//         where: { id: req.params.id },
-//       });
-//       res.json(result);
-//     } catch (err) {
-//       console.error(err);
-//       next(err);
-//     }
-// });
-
-// router.route('/:id')
-//   .patch(async (req, res, next) => {
-//     try {
-//       const result = await Post.update({
-//         comment: req.body.comment,
-//         img: req.body.url,
-//         updatedAt: new Date(),
-//       }, {
-//         where: { id: req.params.id },
-//       });
-//       res.json(result);
-//     } catch (err) {
-//       console.error(err);
-//       next(err);
-//     }
-//   })
-//   .delete('/:id', isLoggedIn, async (req, res, next) => {
-//     try {
-//       const result = await Post.update({
-//         flag: false,
-//         deletedAt: new Date(),
-//       }, {
-//         where: { id: req.params.id },
-//       });
-//       res.json(result);
-//     } catch (err) {
-//       console.error(err);
-//       next(err);
-//     }
-//   });
+router.route('/:id', isLoggedIn)
+  .post(upload2.none(), async (req, res, next) => {
+    try {
+      const post = await Post.findOne({ where: {id: req.params.id }});
+      const hashtags = post.content.match(/#[^\s#]*/g);
+      if (hashtags) {
+        const result = await Promise.all(
+          hashtags.map(tag => {
+            return Hashtag.findOrCreate({
+              where: { title: tag.slice(1).toLowerCase() },
+            })
+          }),
+        );
+        await post.removeHashtags(result.map(r => r[0]));
+      }
+      const up = await Post.update({
+        content: req.body.content,
+        img: req.body.url,
+        updatedAt: new Date(),
+      }, {
+        where: { id: req.params.id },
+      });
+      const post1 = await Post.findOne({ where: { id: req.params.id } });
+      const hashtags1 = req.body.content.match(/#[^\s#]*/g);
+      if (hashtags1) {
+        const result = await Promise.all(
+          hashtags1.map(tag => {
+            return Hashtag.findOrCreate({
+              where: { title: tag.slice(1).toLowerCase() },
+            })
+          }),
+        );
+        await post1.addHashtags(result.map(r => r[0]));
+      }
+      res.redirect('/');
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  })
+  .delete(async (req, res, next) => {
+    try {
+      const result = await Post.update({
+        flag: false,
+        deletedAt: new Date(),
+      }, {
+        where: { id: req.params.id },
+      });
+      res.json(result);
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  });
 
 router.get('/:id', async (req, res, next) => {
   try {

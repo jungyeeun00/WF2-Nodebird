@@ -32,11 +32,14 @@
       <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
       <input type="hidden" value="{{twit.id}}" class="twit-id">
       <div class="twit-author">{{twit.User.nick}}</div>
-      {% if not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
-      <span class="twit-follow">follow</span>
+      {% if user and not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
+      <button class="twit-follow">팔로우하기</button>
       {% endif %}
       {% if user and followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
       <span class="twit-unfollow">unfollow</span>
+      {% endif %}
+      {% if twit.User.id === user.id %}
+      <button class="twit-edit" onclick="location.href='/post/{{twit.id}}/edit';">수정하기</button>
       {% endif %}
       {% if twit.User.id === user.id %}
       <button class="twit-delete">삭제하기</button>
@@ -44,7 +47,7 @@
       <div onclick="location.href='/post/{{twit.id}}';">
       <div class="twit-content">{{twit.content}}</div>
       {% if twit.img %}
-      <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
+      <div class="twit-img" onclick="location.href='/post/{{twit.id}}';"><img src="{{twit.img}}" alt="섬네일"></div>
       {% endif %}
       </div>
       {% if not likerIdList.includes(twit.id)  %}
@@ -83,34 +86,21 @@
       if (myId) {
         const userId = tag.parentNode.querySelector('.twit-user-id').value;
         const twitId = tag.parentNode.querySelector('.twit-id').value;
-        if (confirm('게시물을 삭제하시겠습니까?')) {
-          axios.delete(`/post/${twitId}`)
-            .then(() => {
-              location.reload();
-            })
-            .catch((err) => {
-              console.error(err);
-            });
+        if (userId === myId.value) {
+          if (confirm('게시물을 삭제하시겠습니까?')) {
+            axios.delete(`/post/${twitId}`)
+              .then(() => {
+                location.reload();
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }
         }
       }
     });
   });
-  document.querySelectorAll('.twit-edit').forEach(function (tag) {
-    tag.addEventListener('click', function () {
-      const myId = document.querySelector('#my-id');
-      if (myId) {
-        const userId = tag.parentNode.querySelector('.twit-user-id').value;
-        const twitId = tag.parentNode.querySelector('.twit-id').value;
-        axios.delete(`/post/${twitId}`)
-          .then(() => {
-            location.reload();
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-      }
-    });
-  });
+
   document.querySelectorAll('.twit-follow').forEach(function (tag) {
     tag.addEventListener('click', function () {
       const myId = document.querySelector('#my-id');

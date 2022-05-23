@@ -73,7 +73,7 @@ input[type='text'] {
 #img-label {
   float: left;
 }
-#img { display: none; }
+#img, #img-dlt { display: none; }
 #twit { width: 100%; min-height: 72px; }
 #twit-btn {
   float: right;
