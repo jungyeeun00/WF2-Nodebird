@@ -28,22 +28,18 @@ router.get('/profile', isLoggedIn, async (req, res, next) => {
         model: User,
         attributes: ['id', 'nick'],
       },
-      {
-        model: User,
-        attributes: ['id'],
-        as: 'Liker',
-        through: 'PostLike'
-      },
     ],
       where: {
         flag: true,
       },
       order: [['createdAt', 'DESC']],
     });
+    const lists = await User.findAll({});
     res.render('profile', {
       title: 'prj-name',
       likes: likes,
       twits: posts,
+      lists: lists
     });
   } catch (err) {
     console.log(err);
