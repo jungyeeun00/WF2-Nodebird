@@ -112,7 +112,7 @@ a {
     text-decoration: none; }
 
 hr {
-  border-color: #F1EAE0; }
+  border-color: #bcc5c8; }
 
 .icon {
   fill: #66615b; }
@@ -1575,7 +1575,7 @@ textarea.form-control {
     filter: alpha(opacity=100);
     visibility: visible; }
   .dropdown-menu .divider {
-    background-color: #F1EAE0;
+    background-color: #bcc5c8;
     margin: 0px; }
   .dropdown-menu .dropdown-header {
     color: #9A9A9A;
@@ -1654,7 +1654,7 @@ textarea.form-control {
 /*             Navigation Tabs                 */
 .nav-tabs-navigation {
   text-align: center;
-  border-bottom: 1px solid #F1EAE0;
+  border-bottom: 1px solid #bcc5c8;
   margin-bottom: 30px; }
   .nav-tabs-navigation .nav > li > a {
     padding-bottom: 20px; }
@@ -1694,7 +1694,7 @@ textarea.form-control {
       right: 40%;
       bottom: -1px; }
     .nav-tabs > li.active :before {
-      border-bottom: 11px solid #F1EAE0;
+      border-bottom: 11px solid #bcc5c8;
       border-left: 11px solid transparent;
       border-right: 11px solid transparent;
       content: "";

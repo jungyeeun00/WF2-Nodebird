@@ -22,7 +22,7 @@ router.get('/profile', isLoggedIn, async (req, res, next) => {
   try{
     like = await User.findOne({where: { id : req.user.id }})
     console.log('~~like'+like.id);
-    likes = await like.getLikes()
+    likes = await like.getLiked()
     res.render('profile', {
       title: 'prj-name',
       likes: likes,

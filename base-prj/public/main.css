@@ -134,3 +134,6 @@ input[type='text'] {
 #join-form { padding: 10px; text-align: center; }
 #hashtag-form { text-align: right; }
 footer { text-align: center; }
+.list-unstyled{
+  text-align: center;
+}
