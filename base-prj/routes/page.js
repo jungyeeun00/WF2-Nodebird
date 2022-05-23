@@ -116,23 +116,5 @@ router.get('/search', async (req, res, next) => {
   }
 });
 
-router.get('/post/:id/edit', isLoggedIn, async (req, res, next) => {
-  try {
-    const post = await Post.findOne({
-      where: { id: req.params.id },
-      include: [{
-        model: User,
-        attributes: ['id']
-      }],
-    });
-    res.render('edit', {
-      title: 'prj-name',
-      twit: post,
-    });
-  } catch (err) {
-    console.error(err);
-    next(err);
-  }
-});
 
 module.exports = router;

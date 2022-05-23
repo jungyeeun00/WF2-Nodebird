@@ -69,6 +69,9 @@ input[type='text'] {
   padding: 10px;
   overflow: hidden;
 }
+.img-preview-wrap{
+  padding: 20px 0px;
+}
 #img-preview { max-width: 100%; }
 #img-label {
   float: left;
@@ -107,22 +110,22 @@ input[type='text'] {
 .twit-share{
   height: 20px;
 }
-.twit-delete{
-  font-size: 12px;
+.twit-edit{
+  margin-right: 15px;
+}
+.twit-delete, .twit-edit{
+  float: right;
+  font-size: 25px;
+  padding-top: 5px;
   height: 1px 22px;
-  padding: 0 10px;
-  border-radius: 20px;
-  box-sizing: border-box;
-  border-width: 1.9px;
+  border: none;
   background-color: transparent;
   font-weight: 500;
-  border-color: #66615B;
   color: #66615B;
 }
-.twit-delete:hover{
-  background-color: #66615B;
-  color: rgba(255, 255, 255, 0.7);
-  border-color: #66615B;
+.twit-delete:hover,
+.twit-edit:hover {
+  color: rgba(244, 103, 103, 0.7);
 }
 .twit-img { text-align: center; }
 .twit-img img { max-width: 75%; }
@@ -178,4 +181,23 @@ footer { text-align: center; }
 .comment-author{
   font-size: 14px;
   color: black;
+}
+#content-textarea{
+  width: 305%;
+  height: 180px;
+  margin: 20px 0px;
+}
+.edit-content{
+  border-top: 2px solid #8ECFD5;
+  border-bottom: 2px solid #8ECFD5;
+  padding: 10px 20px;
+}
+#twit-update, #twit-cancel{
+  float: right;
+}
+#twit-cancel{
+  margin-left: 20px;
+}
+#img-label-dlt{
+  margin-left: 20px;
 }

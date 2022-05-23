@@ -1,15 +1,15 @@
 {% extends 'twit.html' %}
 
 {% block content %}
-<div class="timeline">
-    <form id="twit-form" action="/post/{{twit.id}}" method="post" enctype="multipart/form-data">
+<div class="edit-content">
+    <form id="twit-edit-form" action="/post/{{twit.id}}" method="post" enctype="multipart/form-data">
         <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
         <input type="hidden" value="{{twit.id}}" class="twit-id">
+        <div class="twit-author author-detail">{{twit.User.nick}}</div>
         <div class="input-group">
-            <textarea id="twit" name="content" maxlength="140">{{twit.content}}</textarea>
+            <textarea id="content-textarea" name="content" maxlength="140">{{twit.content}}</textarea>
         </div>
-        <div class="img-preview">
-            <!-- <img id="img-preview" src="{{twit.img}}" style="display: none;" width="250" alt="미리보기"> -->
+        <div class="img-preview-wrap">
             {% if twit.img %}
             <img id="img-preview" src="{{twit.img}}" style="display: inline;" width="250" alt="미리보기">
             <input id="img-url" type="hidden" name="url" value="{{twit.img}}">
@@ -19,12 +19,12 @@
             {% endif %}
         </div>
         <div>
-            <label id="img-label" for="img">사진 업로드</label>
+            <label id="img-label" for="img" class="btn btn-info">사진 업로드</label>
             <input id="img" type="file" accept="image/*">
-            <label id="img-label" for="img-dlt">사진 삭제</label>
+            <label id="img-label-dlt" for="img-dlt" class="btn btn-info">사진 삭제</label>
             <input id="img-dlt" type="button">
-            <button id="twit-update" type="submit" class="btn">확인</button>
             <button id="twit-cancel" class="btn" onclick="history.go(-1); return false;">취소</button>
+            <button id="twit-update" type="submit" class="btn">확인</button>
         </div>
     </form>
 </div>

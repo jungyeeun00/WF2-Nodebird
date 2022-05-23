@@ -11,11 +11,15 @@
 
     <div class="twit-container">
         <div class="detail-container">
+            <input id="my-id" type="hidden" value="{{user.id}}">
             {% block content %}
             {% endblock %}
         </div>
     </div>
-
+    <script src="/jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/bootstrap.js" type="text/javascript"></script>
     {% block script %}
     {% endblock %}
 </body>
