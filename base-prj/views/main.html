@@ -43,15 +43,11 @@
       {% if twit.img %}
       <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
       {% endif %}
-      {% for i in twit.Liker %}
-      {% if i.id === user.id %}
+      {% if not likerIdList.includes(twit.id)  %}
+      <button class="twit-like">❤️</button>
+      {% elif likerIdList.includes(twit.id)  %}
       <button class="twit-unlike">💔</button>
       {% endif %}
-      {% endfor %}
-      <!-- {% if not likerIdList.includes(user.id) and twit %} -->
-      <button class="twit-like">❤️</button>
-      <!-- {% else %} -->
-      <!-- {% endif %} -->
       <input type="button" onClick="shareKakaotalk();" value="공유" />
     </div>
     {% endfor %}
