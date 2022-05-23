@@ -1,0 +1,34 @@
+.join-timeline{
+    border: 2px solid #8ECFD5;
+    padding: 10px;
+    border-radius: 0px;
+    text-align: center;
+}
+.join-tb{
+    margin: 0 auto;
+}
+.join-tb-tr{
+    height: 50px;
+}
+.join-tb-td{
+    width: 19%;
+}
+.join-control{
+    width: 80%;
+    border-radius: 4px;
+    height: 37px;
+    padding: 10px;
+    border: 1px solid silver;
+    background-color: #fffcf5;
+    color: #66615b;
+    font-size: 16px;
+    transition: background-color 0.3s ease 0s;
+}
+.join-control:hover{
+    background-color: #FFFFFF;
+    outline: 0 !important;
+    border-color: #66afe9;
+}
+#join-btn{
+    margin-top: 20px;
+}

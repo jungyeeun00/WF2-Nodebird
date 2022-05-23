@@ -20,9 +20,9 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
   padding: 10px;
   border: 1px solid silver;
 }
-input[type='password'] {
+/* input[type='password'] {
   margin-bottom: 15px;
-}
+} */
 input[type='text'] {
   border-radius: 20px;
   border: 2px solid #8ECFD5;
