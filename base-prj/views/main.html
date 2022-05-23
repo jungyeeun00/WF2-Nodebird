@@ -5,7 +5,7 @@
   {% if user %}
   <div>
     <form id="twit-form" action="/post" method="post" enctype="multipart/form-data">
-      <div class="input-group">
+      <div class="login-group">
         <textarea id="twit" name="content" maxlength="140"></textarea>
       </div>
       <div class="img-preview">
@@ -13,9 +13,11 @@
         <input id="img-url" type="hidden" name="url">
       </div>
       <div>
-        <label id="img-label" for="img">사진 업로드</label>
+        <label id="img-label" for="img" class="btn btn-info">사진 업로드</label>
         <input id="img" type="file" accept="image/*">
-        <button id="twit-btn" type="submit" class="btn">짹짹</button>
+        <button id="twit-btn" type="submit" class="btn btn-fill btn-info">
+          <i class="fa fa-paper-plane"></i>
+        </button>
       </div>
     </form>
   </div>
@@ -23,7 +25,7 @@
   <div class="twits">
     <form id="search-form" action="/search">
       <input type="text" name="search" placeholder="아이디/태그 검색">
-      <button class="btn">검색</button>
+      <button class="btn btn-fill">검색</button>
     </form>
     {% for twit in twits %}
     <div class="twit">
@@ -34,7 +36,7 @@
       <button class="twit-follow">팔로우하기</button>
       {% endif %}
       {% if user and followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
-      <button class="twit-unfollow">팔로우취소하기</button>
+      <span class="twit-unfollow">unfollow</span>
       {% endif %}
       {% if twit.User.id === user.id %}
       <button class="twit-edit" onclick="location.href='/post/{{twit.id}}/edit';">수정하기</button>
@@ -42,20 +44,18 @@
       {% if twit.User.id === user.id %}
       <button class="twit-delete">삭제하기</button>
       {% endif %}
-      <div class="twit-content" onclick="location.href='/post/{{twit.id}}';">{{twit.content}}</div>
+      <div onclick="location.href='/post/{{twit.id}}';">
+      <div class="twit-content">{{twit.content}}</div>
       {% if twit.img %}
       <div class="twit-img" onclick="location.href='/post/{{twit.id}}';"><img src="{{twit.img}}" alt="섬네일"></div>
       {% endif %}
-      {% for i in twit.Liker %}
-      {% if i.id === user.id %}
+      </div>
+      {% if not likerIdList.includes(twit.id)  %}
+      <button class="twit-like">❤️</button>
+      {% elif likerIdList.includes(twit.id)  %}
       <button class="twit-unlike">💔</button>
       {% endif %}
-      {% endfor %}
-      <!-- {% if not likerIdList.includes(user.id) and twit %} -->
-      <button class="twit-like">❤️</button>
-      <!-- {% else %} -->
-      <!-- {% endif %} -->
-      <input type="button" onClick="shareKakaotalk();" value="공유" />
+      <input class="twit-share" type="image" onClick="shareKakaotalk();" src="/share.png" />
     </div>
     {% endfor %}
   </div>

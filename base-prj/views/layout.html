@@ -32,9 +32,48 @@
       }
   </script>
 
-    <link rel="stylesheet" href="/main.css">
+  <!--     Fonts and icons     -->
+  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/main.css">
+  <link href="/bootstrap.css" rel="stylesheet" />
+  <link href="/bootstrap.min.css" rel="stylesheet" />
+  <link href="/demo.css" rel="stylesheet" />
+  <link href="/ct-paper.css" rel="stylesheet" />
   </head>
   <body>
+    <nav class="navbar navbar-ct-primary" role="navigation-demo">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="/">
+            <img src="/logo.png" height="60">
+          </a>
+        </div>
+        <div class="collapse navbar-collapse" id="navigation-example-2">
+        <ul class="nav navbar-nav navbar-right">
+        <li>
+         <a href="#">
+          <i class="fa fa-sign-in"></i>
+          Login
+          </a>
+        </li>
+        <li>
+        <a href="#">
+        <i class="fa fa-comment"></i>
+        KaKao
+        </a>
+        </li>
+        <li>
+        <a href="#">
+        <i class="fa fa-plus"></i>
+        Join
+        </a>
+        </li>
+        </ul>
+        </div>
+        </div>
+    </nav>
     <div class="container">
       <div class="profile-wrap">
         <div class="profile">
@@ -53,28 +92,28 @@
           <a id="logout" href="/auth/logout" class="btn">로그아웃</a>
         {% else %}
           <form id="login-form" action="/auth/login" method="post">
-            <div class="input-group">
+            <div class="login-group">
               <label for="email">이메일</label>
-              <input id="email" type="email" name="email" required autofocus>
+              <input id="email" class="form-control" type="email" name="email" required autofocus>
             </div>
-            <div class="input-group">
+            <div class="login-group">
               <label for="password">비밀번호</label>
-              <input id="password" type="password" name="password" required>
+              <input id="password" class="form-control" type="password" name="password" required>
             </div>
-            <a id="join" href="/join" class="btn">회원가입</a>
-            <button id="login" type="submit" class="btn">로그인</button>
-            <a id="kakao" href="/auth/kakao" class="btn">카카오톡</a>
+            <button id="login" type="submit"  class="btn btn-info">로그인</button>
+            <a id="join" href="/join" class="btn btn-fill btn-info">회원가입</a>
+            <a id="kakao" href="/auth/kakao" class="btn btn-fill btn-warning">카카오톡</a>
           </form>
         {% endif %}
         </div>
-        <footer>
-          <b>prj-name</b> at Web Framework2 (N)
-        </footer>
       </div>
       {% block content %}
       {% endblock %}
     </div>
+    <script src="/jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/bootstrap.js" type="text/javascript"></script>
     <script>
       window.onload = () => {
         if (new URL(location.href).searchParams.get('loginError')) {

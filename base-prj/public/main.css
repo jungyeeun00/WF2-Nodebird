@@ -20,15 +20,23 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
   padding: 10px;
   border: 1px solid silver;
 }
+input[type='password'] {
+  margin-bottom: 15px;
+}
+input[type='text'] {
+  border-radius: 20px;
+  border: 2px solid #8ECFD5;
+}
 .container { width: 100%; height: 100%; }
 @media screen and (min-width: 800px) {
   .container { width: 800px; margin: 0 auto; }
 }
-.input-group { margin-bottom: 15px; }
-.input-group label { width: 25%; display: inline-block; }
-.input-group input { width: 70%; }
+#login-form{
+  margin-bottom: 12px;
+}
+.login-group { margin: 10px; }
+.login-group label { width: 25%; display: inline-block; }
 .half { float: left; width: 50%; margin: 10px 0; }
-#join { float: right; }
 .profile-wrap {
   width: 100%;
   display: inline-block;
@@ -36,18 +44,17 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
   margin: 10px 0;
 }
 @media screen and (min-width: 800px) {
-  .profile-wrap { width: 290px; margin-bottom: 0; }
+  .profile-wrap { width: 320px; margin-bottom: 0; }
 }
 .profile {
   text-align: left;
-  padding: 10px;
+  padding: 12px;
   margin-right: 10px;
   border-radius: 4px;
-  border: 1px solid silver;
-  background: lightcoral;
+  border: 2px solid #68b3c8;
 }
 .user-name { font-weight: bold; font-size: 18px; }
-.count { font-weight: bold; color: crimson; font-size: 18px; }
+.count { font-weight: bold; color: #2452ae; font-size: 18px; }
 .timeline {
   margin-top: 10px;
   width: 100%;
@@ -55,54 +62,120 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
   border-radius: 4px;
   vertical-align: top;
 }
-@media screen and (min-width: 800px) { .timeline { width: 500px; } }
+@media screen and (min-width: 800px) { .timeline { width: 650px; } }
 #twit-form {
-  border-bottom: 1px solid silver;
+  border-top: 2px solid #8ECFD5;
+  border-bottom: 2px solid #8ECFD5;
   padding: 10px;
-  background: lightcoral;
   overflow: hidden;
 }
 #img-preview { max-width: 100%; }
 #img-label {
   float: left;
-  cursor: pointer;
-  border-radius: 4px;
-  border: 1px solid crimson;
-  padding: 0 10px;
-  color: white;
-  font-size: 12px;
-  height: 37px;
-  line-height: 37px;
 }
 #img, #img-dlt { display: none; }
 #twit { width: 100%; min-height: 72px; }
 #twit-btn {
   float: right;
-  color: white;
-  background: crimson;
-  border: none;
 }
 .twit {
-  border: 1px solid silver;
-  border-radius: 4px;
+  border: 0px;
+  border-left: 2px solid #8ECFD5;
   padding: 10px;
   position: relative;
-  margin-bottom: 10px;
+  margin-bottom: 22px;
+}
+.twit-content{
+  margin: 12px 0px;
 }
 .twit-author { display: inline-block; font-weight: bold; margin-right: 10px; }
 .twit-follow, .twit-unfollow {
-  padding: 1px 5px;
-  background: #fff;
-  border: 1px solid silver;
-  border-radius: 5px;
-  color: crimson;
-  font-size: 12px;
   cursor: pointer;
+  border-radius: 10px;
+  color: #FFFFFF;
+  font-weight: 500;
+  font-size: 0.7em;
+  text-transform: uppercase;
+  display: inline-block;
+  background-color: #7A9E9F;
+  padding: 0px 8px;
+}
+.twit-like, .twit-unlike, .twit-share{
+  background-color: transparent;
+  border: 0;
+}
+.twit-share{
+  height: 20px;
+}
+.twit-delete{
+  font-size: 12px;
+  height: 1px 22px;
+  padding: 0 10px;
+  border-radius: 20px;
+  box-sizing: border-box;
+  border-width: 1.9px;
+  background-color: transparent;
+  font-weight: 500;
+  border-color: #66615B;
+  color: #66615B;
+}
+.twit-delete:hover{
+  background-color: #66615B;
+  color: rgba(255, 255, 255, 0.7);
+  border-color: #66615B;
 }
 .twit-img { text-align: center; }
 .twit-img img { max-width: 75%; }
 .error-message { color: red; font-weight: bold; }
-#search-form { text-align: right; }
+#search-form { 
+  text-align: right;
+  padding: 10px 0px;
+}
 #join-form { padding: 10px; text-align: center; }
 #hashtag-form { text-align: right; }
 footer { text-align: center; }
+.list-unstyled{
+  text-align: center;
+}
+.twit-container{
+  display: flex;
+}
+.detail-container{
+  margin: 25px auto;
+  width: 700px;
+}
+.detail-content, .new-comment{
+  border-top: 2px solid #8ECFD5;
+  border-bottom: 2px solid #8ECFD5;
+  padding: 10px 20px;
+}
+.new-comment{
+  margin: 15px 0;
+}
+.author-detail{
+  padding-top: 5px;
+  padding-bottom: 10px;
+  color: black;
+}
+.content-detail, .img-detail{
+  padding: 20px 0;
+  margin: 0;
+}
+.img-detail{
+  display: flex;
+}
+.img-detail-src{
+  margin: auto;
+  width: 95%;
+}
+#comment-textarea{
+  width: 88%;
+  min-height: 72px;
+}
+#comment-btn{
+  float: right;
+}
+.comment-author{
+  font-size: 14px;
+  color: black;
+}
