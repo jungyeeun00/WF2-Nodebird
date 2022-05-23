@@ -55,7 +55,7 @@
       {% elif likerIdList.includes(twit.id)  %}
       <button class="twit-unlike">💔</button>
       {% endif %}
-      <input class="twit-share" type="image" onClick="shareKakaotalk();" src="/share.png" />
+      <input class="twit-share" type="image" onClick="shareKakaotalk('{{twit.id}}', '{{twit.User.nick}}');" src="/share.png" />
     </div>
     {% endfor %}
   </div>
