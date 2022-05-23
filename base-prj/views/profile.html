@@ -51,9 +51,9 @@
       <h4>Likes</h4>
       {% for like in likes %}
       <div class="twit">
-        {% for twit in twits %}
-        {% if like.UserId === twit.User.id %}
-        <div class="twit-author">{{twit.User.nick}}</div>
+        {% for list in lists %}
+        {% if like.UserId === list.id %}
+        <div class="twit-author">{{list.nick}}</div>
         {% endif %}
         {% endfor %}
         <div class="twit-content" onclick="location.href='/post/{{like.id}}';">{{like.content}}</div>
