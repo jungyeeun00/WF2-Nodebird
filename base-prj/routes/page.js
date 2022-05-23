@@ -21,7 +21,7 @@ router.get('/profile', isLoggedIn, async (req, res, next) => {
   try{
     like = await User.findOne({where: { id : req.user.id }})
     console.log('like'+like.id);
-    likes = await like.getLikes()
+    likes = await like.getLiked()
     res.render('profile', {
       title: 'prj-name',
       likes: likes,
@@ -54,29 +54,10 @@ router.get('/', async (req, res, next) => {
       },
       order: [['createdAt', 'DESC']],
     });
-    console.log('list : '+posts[0].Liker[0])
+    // console.log('list : '+posts[0].Liker[0])
     res.render('main', {
       title: 'prj-name',
       twits: posts,
-    });
-  } catch (err) {
-    console.error(err);
-    next(err);
-  }
-});
-
-router.get('/post/:id', async (req, res, next) => {
-  try {
-    const post = await Post.findOne({
-      where: { id: req.params.id },
-      include: {
-        model: User,
-        attributes: ['id', 'nick'],
-      },
-    });
-    res.render('twit', {
-      title: 'prj-name',
-      twit: post,
     });
   } catch (err) {
     console.error(err);
@@ -117,6 +98,25 @@ router.get('/search', async (req, res, next) => {
   } catch (error) {
     console.error(error);
     return next(error);
+  }
+});
+
+router.get('/post/:id/edit', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({
+      where: { id: req.params.id },
+      include: [{
+        model: User,
+        attributes: ['id']
+      }],
+    });
+    res.render('edit', {
+      title: 'prj-name',
+      twit: post,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 });
 

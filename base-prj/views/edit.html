@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="timeline">
+    <form id="twit-form" action="/post/{{twit.id}}" method="post" enctype="multipart/form-data">
+        <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
+        <input type="hidden" value="{{twit.id}}" class="twit-id">
+        <div class="input-group">
+            <textarea id="twit" name="content" maxlength="140">{{twit.content}}</textarea>
+        </div>
+        <div class="img-preview">
+            <!-- <img id="img-preview" src="{{twit.img}}" style="display: none;" width="250" alt="미리보기"> -->
+            {% if twit.img %}
+            <img id="img-preview" src="{{twit.img}}" style="display: inline;" width="250" alt="미리보기">
+            <input id="img-url" type="hidden" name="url" value="{{twit.img}}">
+            {% else %}
+            <img id="img-preview" src="" style="display: none;" width="250" alt="미리보기">
+            <input id="img-url" type="hidden" name="url" value="">
+            {% endif %}
+        </div>
+        <div>
+            <label id="img-label" for="img">사진 업로드</label>
+            <input id="img" type="file" accept="image/*">
+            <label id="img-label" for="img-dlt">사진 삭제</label>
+            <input id="img-dlt" type="button">
+            <button id="twit-update" type="submit" class="btn">확인</button>
+            <button id="twit-cancel" class="btn" onclick="history.go(-1); return false;">취소</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+    if (document.getElementById('img')) {
+        document.getElementById('img').addEventListener('change', function (e) {
+            const formData = new FormData();
+            console.log(this, this.files);
+            formData.append('img', this.files[0]);
+            axios.post('/post/img', formData)
+                .then((res) => {
+                    document.getElementById('img-url').value = res.data.url;
+                    document.getElementById('img-preview').src = res.data.url;
+                    document.getElementById('img-preview').style.display = 'inline';
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        });
+    }
+
+    if (document.getElementById('img-dlt')) {
+        document.getElementById('img-dlt').addEventListener('click', function (e) {
+            document.getElementById('img-url').value = "";
+            document.getElementById('img-preview').src = "";
+            document.getElementById('img-preview').style.display = 'none';
+        });
+    }
+
+</script>
+{% endblock %}
