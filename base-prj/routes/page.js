@@ -13,14 +13,15 @@ router.use((req, res, next) => {
   res.locals.followerCount = req.user ? req.user.Followers.length : 0;
   res.locals.followingCount = req.user ? req.user.Followings.length : 0;
   res.locals.followerIdList = req.user ? req.user.Followings.map(f => f.id) : [];
-  res.locals.likerIdList = req.twit ? req.twit.Liker.map(f => f.id) : [];
+  res.locals.likerIdList = req.user ? req.user.Liked.map(f => f.id) : [];
+  console.log("!!! " +  res.locals.likerIdList)
   next();
 });
 
 router.get('/profile', isLoggedIn, async (req, res, next) => {
   try{
     like = await User.findOne({where: { id : req.user.id }})
-    console.log('like'+like.id);
+    console.log('~~like'+like.id);
     likes = await like.getLikes()
     res.render('profile', {
       title: 'prj-name',
@@ -45,8 +46,9 @@ router.get('/', async (req, res, next) => {
       },
       {
         model: User,
-        attributes: ['id', 'nick'],
-        as: 'Liker'
+        attributes: ['id'],
+        as: 'Liker',
+        through: 'PostLike'
       },
     ],
       where: {
@@ -63,25 +65,7 @@ router.get('/', async (req, res, next) => {
     console.error(err);
     next(err);
   }
-});
-
-router.get('/post/:id', async (req, res, next) => {
-  try {
-    const post = await Post.findOne({
-      where: { id: req.params.id },
-      include: {
-        model: User,
-        attributes: ['id', 'nick'],
-      },
-    });
-    res.render('twit', {
-      title: 'prj-name',
-      twit: post,
-    });
-  } catch (err) {
-    console.error(err);
-    next(err);
-  }
+ 
 });
 
 router.get('/search', async (req, res, next) => {
@@ -107,7 +91,7 @@ router.get('/search', async (req, res, next) => {
     if (hashtag) {
       posts = await hashtag.getPosts({ include: [{ model: User }] });
     }
-    else if(user) {
+    else if (user) {
       posts = await user.getPosts({ include: [{ model: User }] });
     }
     return res.render('main', {
