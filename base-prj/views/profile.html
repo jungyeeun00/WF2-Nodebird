@@ -2,21 +2,25 @@
 
 {% block content %}
   <div class="timeline">
-    <div class="followings half">
-      <h3>Following</h3>
-      {% if user.Followings %}
-        {% for following in user.Followings %}
-          <div class="follow-nick">{{following.nick}}</div>
-        {% endfor %}
-      {% endif %}
-    </div>
-    <div class="followers half">
-      <h3>Follower</h3>
-      {% if user.Followers %}
-        {% for follower in user.Followers %}
-          <div class="follow-nick">{{follower.nick}}</div>
-        {% endfor %}
-      {% endif %}
+    <div class="follow-container">
+      <div class="followings half">
+        <h3>Following</h3>
+        {% if user.Followings %}
+          {% for following in user.Followings %}
+            <span class="follow-nick">{{following.nick}}</span>
+            <br>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <div class="followers half">
+        <h3>Follower</h3>
+        {% if user.Followers %}
+          {% for follower in user.Followers %}
+            <span class="follow-nick">{{follower.nick}}</span>
+            <br>
+          {% endfor %}
+        {% endif %}
+      </div>
     </div>
   <div class="profile-tabs">
     <div class="nav-tabs-navigation">

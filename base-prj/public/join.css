@@ -40,3 +40,7 @@
     color: black;
     margin: 3px;
 }
+.follow-container{
+    display: inline-block;
+    width: 650px;
+}
