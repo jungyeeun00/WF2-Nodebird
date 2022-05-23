@@ -2,51 +2,86 @@
 
 {% block content %}
   <div class="timeline">
-    <div class="profile-tabs">
-      <div class="nav-tabs-navigation">
-          <div class="nav-tabs-wrapper">
-              <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-                  <li class="active"><a href="#follows" data-toggle="tab">Following</a></li>
-                  <li><a href="#following" data-toggle="tab">Follower</a></li>
+    <div class="followings half">
+      <h3>Following</h3>
+      {% if user.Followings %}
+        {% for following in user.Followings %}
+          <div class="follow-nick">{{following.nick}}</div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <div class="followers half">
+      <h3>Follower</h3>
+      {% if user.Followers %}
+        {% for follower in user.Followers %}
+          <div class="follow-nick">{{follower.nick}}</div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  <div class="profile-tabs">
+    <div class="nav-tabs-navigation">
+        <div class="nav-tabs-wrapper">
+            <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+                <li class="active"><a href="#follows" data-toggle="tab">My Post</a></li>
+                <li><a href="#following" data-toggle="tab">Likes</a></li>
 <!--                                 <li><a href="#following" data-toggle="tab">Following</a></li> -->
-              </ul>
-          </div>
-      </div>
-      <div id="my-tab-content" class="tab-content">
-          <div class="tab-pane active" id="follows">
-              <div class="row">
-                  <div class="col-md-6 col-md-offset-3">
-                      <ul class="list-unstyled follows">
-                        {% if user.Followings %}
-                        {% for following in user.Followings %}
-                        <li>
-                          <h6>{{following.nick}}</h6>
-                        </li>
-                        <hr />
-                        {% endfor %}
-                        {% endif %} 
-                      </ul>
-                  </div>
-              </div>
-          </div>
-          <div class="tab-pane text-center" id="following">
-            <div class="row">
-              <div class="col-md-6 col-md-offset-3">
-                <ul class="list-unstyled follows">
-                  {% if user.Followers %}
-                  {% for follower in user.Followers %}
-                  <li>
-                    <h6>{{follower.nick}}</h6>
-                  </li>
-                  <hr />
-                  {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div id="my-tab-content" class="tab-content">
+        <div class="tab-pane active" id="follows">
+          <div class="row">
+              <div>
+                {% for twit in twits %}
+                {% if user.id === twit.User.id %}
+                <div class="twit">
+                  <div class="twit-author">{{twit.User.nick}}</div>
+                  <div class="twit-content" onclick="location.href='/post/{{twit.id}}';">{{twit.content}}</div>
+                  {% if twit.img %}
+                  <div class="twit-img" onclick="location.href='/post/{{twit.id}}';"><img src="{{twit.img}}" alt="섬네일"></div>
                   {% endif %}
-                </ul>
+                </div>
+                {% endif %}
+                {% endfor %}
               </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="following">
+          <div class="row">
+            <div>
+              {% for like in likes %}
+              <div class="twit">
+                {% for list in lists %}
+                {% if like.UserId === list.id %}
+                <div class="twit-author">{{list.nick}}</div>
+                {% endif %}
+                {% endfor %}
+                <div class="twit-content" onclick="location.href='/post/{{like.id}}';">{{like.content}}</div>
+                {% if like.img %}
+                <div class="twit-img" onclick="location.href='/post/{{like.id}}';"><img src="{{like.img}}" alt="섬네일"></div>
+                {% endif %}
+              </div>
+              {% endfor %}
             </div>
           </div>
         </div>
-  </div>  
+      </div>
+</div>  
+
+  <!-- <div class="like-list">
+    <h4>My Posts</h4>
+    {% for twit in twits %}
+    {% if user.id === twit.User.id %}
+    <div class="twit">
+      <div class="twit-author">{{twit.User.nick}}</div>
+      <div class="twit-content" onclick="location.href='/post/{{twit.id}}';">{{twit.content}}</div>
+      {% if twit.img %}
+      <div class="twit-img" onclick="location.href='/post/{{twit.id}}';"><img src="{{twit.img}}" alt="섬네일"></div>
+      {% endif %}
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
   <div class="like-list">
       <h4>Likes</h4>
       {% for like in likes %}
@@ -63,5 +98,5 @@
       </div>
       {% endfor %}
     </div>
-  </div>
+  </div> -->
 {% endblock %}

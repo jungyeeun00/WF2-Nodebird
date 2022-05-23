@@ -32,3 +32,11 @@
 #join-btn{
     margin-top: 20px;
 }
+.followings, .followers{
+    margin-bottom: 50px;
+    padding-left: 20px;
+}
+.follow-nick{
+    color: black;
+    margin: 3px;
+}
