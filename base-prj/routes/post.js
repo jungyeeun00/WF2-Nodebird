@@ -81,7 +81,7 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
 
 // router.route('/:id')
 //   .patch(async (req, res, next) => {
-//     try {
+//     try {po
 //       const result = await Post.update({
 //         comment: req.body.comment,
 //         img: req.body.url,

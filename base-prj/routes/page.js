@@ -23,9 +23,27 @@ router.get('/profile', isLoggedIn, async (req, res, next) => {
     like = await User.findOne({where: { id : req.user.id }})
     console.log('~~like'+like.id);
     likes = await like.getLiked()
+    const posts = await Post.findAll({
+      include: [{
+        model: User,
+        attributes: ['id', 'nick'],
+      },
+      {
+        model: User,
+        attributes: ['id'],
+        as: 'Liker',
+        through: 'PostLike'
+      },
+    ],
+      where: {
+        flag: true,
+      },
+      order: [['createdAt', 'DESC']],
+    });
     res.render('profile', {
       title: 'prj-name',
       likes: likes,
+      twits: posts,
     });
   } catch (err) {
     console.log(err);
@@ -56,7 +74,6 @@ router.get('/', async (req, res, next) => {
       },
       order: [['createdAt', 'DESC']],
     });
-    console.log('list : '+posts[0].Liker[0])
     res.render('main', {
       title: 'prj-name',
       twits: posts,
