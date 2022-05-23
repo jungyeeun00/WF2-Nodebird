@@ -41,7 +41,7 @@
       <div onclick="location.href='/post/{{twit.id}}';">
       <div class="twit-content">{{twit.content}}</div>
       {% if twit.img %}
-      <div class="twit-img" onclick="location.href='/post/{{twit.id}}';"><img src="{{twit.img}}" alt="섬네일"></div>
+      <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
       {% endif %}
       </div>
       {% if not likerIdList.includes(twit.id)  %}
@@ -49,7 +49,7 @@
       {% elif likerIdList.includes(twit.id)  %}
       <button class="twit-unlike">💔</button>
       {% endif %}
-      <input class="twit-share" type="image" onClick="shareKakaotalk('{{twit.id}}', '{{twit.User.nick}}');" src="/share.png" />
+      <input class="twit-share" type="image" onClick="shareKakaotalk();" src="/share.png" />
     </div>
     {% endfor %}
   </div>

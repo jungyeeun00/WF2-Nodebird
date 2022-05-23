@@ -12,6 +12,11 @@ const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
+router.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 try {
   fs.readdirSync('uploads');
 } catch (error) {
@@ -103,7 +108,7 @@ router.post('/:id', isLoggedIn, upload2.none(), async (req, res, next) => {
     next(error);
   }
 });
-  
+
 router.get('/:id/delete', isLoggedIn, async (req, res, next) => {
   try {
     post = await Post.findOne({ where: { id: req.params.id } });
@@ -124,13 +129,13 @@ router.get('/:id/delete', isLoggedIn, async (req, res, next) => {
     }, {
       where: { id: req.params.id },
     });
-    res.redirect('../')
+    res.redirect('/');
   } catch (error) {
     console.error(error);
     next(error);
   }
 });
-  
+
 router.get('/:id/edit', isLoggedIn, async (req, res, next) => {
   try {
     const post = await Post.findOne({
@@ -200,7 +205,7 @@ router.post('/:id/comment', isLoggedIn, upload3.none(), async (req, res, next) =
       },
       order: [['createdAt', 'DESC']],
     });
-    res.render('twit', {
+    res.render('detail', {
       title: 'prj-name',
       twit: post,
       comments: comments
