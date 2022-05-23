@@ -8,23 +8,22 @@
 
     <script type="text/JavaScript" src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
     <script type="text/javascript">
-      function shareKakaotalk() {
+      function shareKakaotalk(postId, userNick) {
           Kakao.init("ead3aaab226fd82be7d5f3db0b0abeea");      // 사용할 앱의 JavaScript 키를 설정
           Kakao.Link.sendDefault({
                 objectType:"feed"
               , content : {
-                    title:"게시글 공유"   // 콘텐츠의 타이틀
-                //  , description:"카카오톡 메시지 전송 연습용임"   // 콘텐츠 상세설명
-                  , imageUrl:""   // 썸네일 이미지
+                    title: userNick + '님의 게시글'   // 콘텐츠의 타이틀
+                  , imageUrl: "https://ifh.cc/g/mVnD7j.png"   // 썸네일 이미지
                   , link : {
-                        mobileWebUrl:"http://www.naver.com/"   // 모바일 카카오톡에서 사용하는 웹 링크 URL
-                      , webUrl:"http://www.naver.com/" // PC버전 카카오톡에서 사용하는 웹 링크 URL
+                        mobileWebUrl: "http://localhost:8001"+"/post/"+postId // 모바일 카카오톡에서 사용하는 웹 링크 URL
+                      , webUrl: "http://localhost:8001"+"/post/"+postId  // PC버전 카카오톡에서 사용하는 웹 링크 URL
                   }
               }, buttons : [
                   { title:"게시글 확인"    // 버튼 제목
                       , link : {
-                          mobileWebUrl:"http://www.naver.com/"   // 모바일 카카오톡에서 사용하는 웹 링크 URL
-                        , webUrl:"http://www.naver.com/" // PC버전 카카오톡에서 사용하는 웹 링크 URL
+                          mobileWebUrl: "http://localhost:8001"+"/post/"+postId  // 모바일 카카오톡에서 사용하는 웹 링크 URL
+                        , webUrl: "http://localhost:8001"+"/post/"+postId // PC버전 카카오톡에서 사용하는 웹 링크 URL
                       }
                   }
               ]
