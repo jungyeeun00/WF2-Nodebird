@@ -8,6 +8,14 @@
     {% if not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
     <span class="twit-follow">follow</span>
     {% endif %}
+    {% if user and twit.User.id === user.id %}
+    <button class="twit-delete">
+        <i class="fa fa-trash" aria-hidden="true"></i>
+    </button>
+    <button class="twit-edit" onclick="location.href='/post/{{twit.id}}/edit';">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+    </button>
+    {% endif %}
     <div class="twit-content content-detail">{{twit.content}}</div>
     {% if twit.img %}
     <div class="img-detail"><img class="img-detail-src" src="{{twit.img}}" alt="섬네일"></div>
@@ -56,6 +64,27 @@
                             .catch((err) => {
                                 console.error(err);
                             });
+                    }
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll('.twit-delete').forEach(function (tag) {
+        tag.addEventListener('click', function () {
+            const myId = document.querySelector('#my-id');
+            if (myId) {
+                const userId = tag.parentNode.querySelector('.twit-user-id').value;
+                const twitId = tag.parentNode.querySelector('.twit-id').value;
+                if (userId === myId.value) {
+                    if (confirm('게시물을 삭제하시겠습니까?')) {
+                        axios.get(`/post/${twitId}/delete`)
+                        .then(() => {
+                            location.reload();
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
                     }
                 }
             }
