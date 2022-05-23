@@ -45,10 +45,10 @@
       <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
       {% endif %}
       </div>
-      {% if not likerIdList.includes(user.id) and twit %}
-      <button class="twit-like">좋아요</button>
-      {% else %}
-      <button class="twit-unlike">좋아요 취소</button>
+      {% if not likerIdList.includes(twit.id)  %}
+      <button class="twit-like">❤️</button>
+      {% elif likerIdList.includes(twit.id)  %}
+      <button class="twit-unlike">💔</button>
       {% endif %}
       <input type="button" onClick="shareKakaotalk();" value="공유" />
     </div>
@@ -153,12 +153,11 @@
       const myId = document.querySelector('#my-id');
       if (myId) {
         const twitId = tag.parentNode.querySelector('.twit-id').value;
-        axios.post(`/user/${twitId}/like`)
+        axios.post(`/post/${twitId}/like`)
           .then(() => {
             location.reload();
           })
           .catch((err) => {
-            console.log('여기임')
             console.error(err);
           });
       }
@@ -170,7 +169,7 @@
       const myId = document.querySelector('#my-id');
       if (myId) {
         const twitId = tag.parentNode.querySelector('.twit-id').value;
-        axios.delete(`/user/${twitId}/like`)
+        axios.delete(`/post/${twitId}/like`)
           .then(() => {
             location.reload();
           })

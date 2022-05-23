@@ -174,8 +174,7 @@ router.post('/:id/comment', isLoggedIn, upload3.none(), async (req, res, next) =
 router.post('/:id/like', async (req, res, next) => {
   try{
     const post = await Post.findOne({ where: { id: req.params.id }});
-    console.log(post);
-    await post.addLiker(req.user.id);
+    await post.addLiker(req.user.id); //comment처럼 테이블 만들기
     res.send ('success');
   } catch{
     console.error(error);
@@ -185,7 +184,7 @@ router.post('/:id/like', async (req, res, next) => {
 
 router.delete('/:id/like', async (req, res, next) => {
   try{
-    const post = await Post.findOne({ where: { UserId: req.params.id }});
+    const post = await Post.findOne({ where: { id: req.params.id }});
     await post.removeLiker (req.user.id);
     res.send('success');
   } catch{
