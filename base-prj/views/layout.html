@@ -65,6 +65,27 @@
           </form>
         {% endif %}
         </div>
+        {% if user and user.id %}
+        <div class="suggestion">
+          <div class="user-name">{{user.nick + '님을 위한 추천'}}</div>
+          {% for suggestion in suggestions %}
+          {% if not followerIdList.includes(suggestion.id) and suggestion.id !== user.id %}
+          <div class="suggested">
+            <input type="hidden" value="{{suggestion.id}}" class="suggestion-id">
+            <div class="suggested-user">
+              <div class="suggested-name">{{suggestion.nick}}</div>
+              <div class="suggested-info">
+                {{suggestion.createdAt.toString().split(' ')[1]}} 
+                {{suggestion.createdAt.toString().split(' ')[2]}} 
+                {{suggestion.createdAt.toString().split(' ')[3]}} 가입
+              </div>
+            </div>
+            <div class="suggested-follow">follow</div>
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
       </div>
       {% block content %}
       {% endblock %}
@@ -79,6 +100,27 @@
           alert(new URL(location.href).searchParams.get('loginError'));
         }
       };
+    </script>
+    <script>
+      document.querySelectorAll('.suggested-follow').forEach(function (tag) {
+        tag.addEventListener('click', function () {
+          const myId = document.querySelector('#my-id');
+          if (myId) {
+            const userId = tag.parentNode.querySelector('.suggestion-id').value;
+            if (userId !== myId.value) {
+              if (confirm('팔로잉하시겠습니까?')) {
+                axios.post(`/user/${userId}/follow`)
+                  .then(() => {
+                    location.reload();
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                  });
+              }
+            }
+          }
+        })
+      });
     </script>
     {% block script %}
     {% endblock %}
