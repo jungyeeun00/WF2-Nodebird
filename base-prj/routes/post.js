@@ -64,51 +64,91 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
   }
 });
 
-// router.delete('/:id', isLoggedIn, async (req, res, next) => {
-//     try {
-//       const result = await Post.update({
-//         flag: false,
-//         deletedAt: new Date(),
-//       }, {
-//         where: { id: req.params.id },
-//       });
-//       res.json(result);
-//     } catch (err) {
-//       console.error(err);
-//       next(err);
-//     }
-// });
-
-// router.route('/:id')
-//   .patch(async (req, res, next) => {
-//     try {
-//       const result = await Post.update({
-//         comment: req.body.comment,
-//         img: req.body.url,
-//         updatedAt: new Date(),
-//       }, {
-//         where: { id: req.params.id },
-//       });
-//       res.json(result);
-//     } catch (err) {
-//       console.error(err);
-//       next(err);
-//     }
-//   })
-//   .delete('/:id', isLoggedIn, async (req, res, next) => {
-//     try {
-//       const result = await Post.update({
-//         flag: false,
-//         deletedAt: new Date(),
-//       }, {
-//         where: { id: req.params.id },
-//       });
-//       res.json(result);
-//     } catch (err) {
-//       console.error(err);
-//       next(err);
-//     }
-//   });
+router.post('/:id', isLoggedIn, upload2.none(), async (req, res, next) => {
+  try {
+    post = await Post.findOne({ where: {id: req.params.id }});
+    hashtags = post.content.match(/#[^\s#]*/g);
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map(tag => {
+          return Hashtag.findOrCreate({
+            where: { title: tag.slice(1).toLowerCase() },
+          })
+        }),
+      );
+      await post.removeHashtags(result.map(r => r[0]));
+    }
+    const up = await Post.update({
+      content: req.body.content,
+      img: req.body.url,
+      updatedAt: new Date(),
+    }, {
+      where: { id: req.params.id },
+    });
+    post = await Post.findOne({ where: { id: req.params.id } });
+    hashtags = req.body.content.match(/#[^\s#]*/g);
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map(tag => {
+          return Hashtag.findOrCreate({
+            where: { title: tag.slice(1).toLowerCase() },
+          })
+        }),
+      );
+      await post.addHashtags(result.map(r => r[0]));
+    }
+    res.redirect(`/post/${req.params.id}`);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+  
+router.get('/:id/delete', isLoggedIn, async (req, res, next) => {
+  try {
+    post = await Post.findOne({ where: { id: req.params.id } });
+    hashtags = post.content.match(/#[^\s#]*/g);
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map(tag => {
+          return Hashtag.findOrCreate({
+            where: { title: tag.slice(1).toLowerCase() },
+          })
+        }),
+      );
+      await post.removeHashtags(result.map(r => r[0]));
+    }
+    const result = await Post.update({
+      flag: false,
+      deletedAt: new Date(),
+    }, {
+      where: { id: req.params.id },
+    });
+    res.redirect('../')
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+  
+router.get('/:id/edit', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({
+      where: { id: req.params.id },
+      include: [{
+        model: User,
+        attributes: ['id', 'nick']
+      }],
+    });
+    res.render('edit', {
+      title: 'prj-name',
+      twit: post,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
 
 router.get('/:id', async (req, res, next) => {
   try {
@@ -129,7 +169,7 @@ router.get('/:id', async (req, res, next) => {
       },
       order: [['createdAt', 'DESC']],
     });
-    res.render('twit', {
+    res.render('detail', {
       title: 'prj-name',
       twit: post,
       comments: comments

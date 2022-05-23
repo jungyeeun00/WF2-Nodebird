@@ -1,59 +1,27 @@
 <html>
-    <body>
-        <div class="twit">
-            <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
-            <input type="hidden" value="{{twit.id}}" class="twit-id">
-            <div class="twit-author">{{twit.User.nick}}</div>
-            {% if not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
-            <button class="twit-follow">팔로우하기</button>
-            {% endif %}
-            <div class="twit-content">{{twit.content}}</div>
-            {% if twit.img %}
-            <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
-            {% endif %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    {% include "partials/head.html" %}
+</head>
+
+<body>
+    {% include "partials/navbar.html" %}
+
+    <div class="twit-container">
+        <div class="detail-container">
+            <input id="my-id" type="hidden" value="{{user.id}}">
+            {% block content %}
+            {% endblock %}
         </div>
-        <div class="new-comment">
-            <form id="comment-form" action="/post/{{twit.id}}/comment" method="post" enctype="multipart/form-data">
-                <div class="input-group">
-                    <textarea id="comment" name="content" maxlength="140"></textarea>
-                    <button id="comment-btn" type="submit" class="btn">등록</button>
-                </div>
-            </form>
-        </div>
-        <div class="comments">
-            {% for comment in comments %}
-            <div class="comment" style="border: 1px solid black; margin-bottom: 5px;">
-                <input type="hidden" value="{{comment.User.id}}" class="comment-user-id">
-                <input type="hidden" value="{{comment.id}}" class="comment-id">
-                <div class="comment-author">{{comment.User.nick}}</div>
-                {% if not followerIdList.includes(comment.User.id) and comment.User.id !== user.id %}
-                <button class="comment-follow">팔로우하기</button>
-                {% endif %}
-                <div class="comment-content">{{comment.content}}</div>
-            </div>
-            {% endfor %}
-        </div>
-    </body>
+    </div>
+    <script src="/jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/bootstrap.js" type="text/javascript"></script>
+    {% block script %}
+    {% endblock %}
+</body>
 </html>
 
-<script>
-    document.querySelectorAll('.commit-follow').forEach(function (tag) {
-        tag.addEventListener('click', function () {
-            const myId = document.querySelector('#my-id');
-            if (myId) {
-                const userId = tag.parentNode.querySelector('.comment-user-id').value;
-                if (userId !== myId.value) {
-                    if (confirm('팔로잉하시겠습니까?')) {
-                        axios.post(`/user/${userId}/follow`)
-                            .then(() => {
-                                location.reload();
-                            })
-                            .catch((err) => {
-                                console.error(err);
-                            });
-                    }
-                }
-            }
-        });
-    });
-</script>

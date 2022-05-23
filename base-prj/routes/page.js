@@ -23,10 +23,24 @@ router.get('/profile', isLoggedIn, async (req, res, next) => {
     const suggestions = await User.findAll();
     like = await User.findOne({where: { id : req.user.id }})
     console.log('~~like'+like.id);
-    likes = await like.getLiked()
+    likes = await like.getLiked();
+    const posts = await Post.findAll({
+      include: [{
+        model: User,
+        attributes: ['id', 'nick'],
+      },
+    ],
+      where: {
+        flag: true,
+      },
+      order: [['createdAt', 'DESC']],
+    });
+    const lists = await User.findAll({});
     res.render('profile', {
       title: 'prj-name',
       likes: likes,
+      twits: posts,
+      lists: lists,
       suggestions: suggestions,
     });
   } catch (err) {
@@ -59,7 +73,6 @@ router.get('/', async (req, res, next) => {
       },
       order: [['createdAt', 'DESC']],
     });
-    console.log('list : '+posts[0].Liker[0])
     res.render('main', {
       title: 'prj-name',
       twits: posts,
@@ -108,5 +121,6 @@ router.get('/search', async (req, res, next) => {
     return next(error);
   }
 });
+
 
 module.exports = router;

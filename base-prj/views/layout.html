@@ -3,80 +3,36 @@
   <head>
     <meta charset="UTF-8">
     <title>{{title}}</title>
-    <meta name="viewport" content="width=device-width, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {% include "partials/head.html" %}
 
     <script type="text/JavaScript" src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
     <script type="text/javascript">
-      function shareKakaotalk() {
+      function shareKakaotalk(postId, userNick) {
           Kakao.init("ead3aaab226fd82be7d5f3db0b0abeea");      // 사용할 앱의 JavaScript 키를 설정
           Kakao.Link.sendDefault({
                 objectType:"feed"
               , content : {
-                    title:"게시글 공유"   // 콘텐츠의 타이틀
-                //  , description:"카카오톡 메시지 전송 연습용임"   // 콘텐츠 상세설명
-                  , imageUrl:""   // 썸네일 이미지
+                    title: userNick + '님의 게시글'   // 콘텐츠의 타이틀
+                  , imageUrl: "https://ifh.cc/g/mVnD7j.png"   // 썸네일 이미지
                   , link : {
-                        mobileWebUrl:"http://www.naver.com/"   // 모바일 카카오톡에서 사용하는 웹 링크 URL
-                      , webUrl:"http://www.naver.com/" // PC버전 카카오톡에서 사용하는 웹 링크 URL
+                        mobileWebUrl: "http://localhost:8001"+"/post/"+postId // 모바일 카카오톡에서 사용하는 웹 링크 URL
+                      , webUrl: "http://localhost:8001"+"/post/"+postId  // PC버전 카카오톡에서 사용하는 웹 링크 URL
                   }
               }, buttons : [
                   { title:"게시글 확인"    // 버튼 제목
                       , link : {
-                          mobileWebUrl:"http://www.naver.com/"   // 모바일 카카오톡에서 사용하는 웹 링크 URL
-                        , webUrl:"http://www.naver.com/" // PC버전 카카오톡에서 사용하는 웹 링크 URL
+                          mobileWebUrl: "http://localhost:8001"+"/post/"+postId  // 모바일 카카오톡에서 사용하는 웹 링크 URL
+                        , webUrl: "http://localhost:8001"+"/post/"+postId // PC버전 카카오톡에서 사용하는 웹 링크 URL
                       }
                   }
               ]
           });
       }
   </script>
-
-  <!--     Fonts and icons     -->
-  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-  <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="/main.css">
-  <link rel="stylesheet" href="/new.css">
-  <link href="/bootstrap.css" rel="stylesheet" />
-  <link href="/bootstrap.min.css" rel="stylesheet" />
-  <link href="/demo.css" rel="stylesheet" />
-  <link href="/ct-paper.css" rel="stylesheet" />
   </head>
   <body>
-    <nav class="navbar navbar-ct-primary" role="navigation-demo">
-      <div class="container">
-        <div class="navbar-header">
-        <img src="/logo.png" height="60">
-        </div>
-        <div class="collapse navbar-collapse" id="navigation-example-2">
-        <!-- <ul class="nav navbar-nav">
-        <a href="#" class="btn btn-primary btn-simple">Link</a>
-        <a href="#" target="_blank" class="btn btn-primary btn-fill">Button</a>
-        </ul> -->
-        <ul class="nav navbar-nav navbar-right">
-        <li>
-         <a href="#">
-          <i class="fa fa-sign-in"></i>
-          Login
-          </a>
-        </li>
-        <li>
-        <a href="#">
-        <i class="fa fa-comment"></i>
-        KaKao
-        </a>
-        </li>
-        <li>
-        <a href="#">
-        <i class="fa fa-plus"></i>
-        Join
-        </a>
-        </li>
-        </ul>
-        </div>
-        </div>
-    </nav>
+    {% include "partials/navbar.html" %}
+    
     <div class="container">
       <div class="profile-wrap">
         <div class="profile">
@@ -134,7 +90,10 @@
       {% block content %}
       {% endblock %}
     </div>
+    <script src="/jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/bootstrap.js" type="text/javascript"></script>
     <script>
       window.onload = () => {
         if (new URL(location.href).searchParams.get('loginError')) {
