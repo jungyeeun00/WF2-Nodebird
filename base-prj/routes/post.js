@@ -7,7 +7,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Post, Hashtag, Comment } = require('../models');
+const { Post, User, Hashtag, Comment } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
@@ -64,20 +64,20 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
   }
 });
 
-router.delete('/:id', isLoggedIn, async (req, res, next) => {
-    try {
-      const result = await Post.update({
-        flag: false,
-        deletedAt: new Date(),
-      }, {
-        where: { id: req.params.id },
-      });
-      res.json(result);
-    } catch (err) {
-      console.error(err);
-      next(err);
-    }
-});
+// router.delete('/:id', isLoggedIn, async (req, res, next) => {
+//     try {
+//       const result = await Post.update({
+//         flag: false,
+//         deletedAt: new Date(),
+//       }, {
+//         where: { id: req.params.id },
+//       });
+//       res.json(result);
+//     } catch (err) {
+//       console.error(err);
+//       next(err);
+//     }
+// });
 
 // router.route('/:id')
 //   .patch(async (req, res, next) => {
@@ -110,10 +110,15 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
 //     }
 //   });
 
-router.get('/:id/comments', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
-    const post = await Post.findOne({ where: { id: req.params.id } });
-    if (!post) return res.status(404).send('포스트가 존재하지 않습니다.');
+    const post = await Post.findOne({
+      where: { id: req.params.id },
+      include: {
+        model: User,
+        attributes: ['id', 'nick'],
+      },
+    });
     const comments = await Comment.findAll({
       where: {
         PostId: req.params.id,
@@ -124,18 +129,19 @@ router.get('/:id/comments', async (req, res, next) => {
       },
       order: [['createdAt', 'DESC']],
     });
-    res.render('main', {
+    res.render('twit', {
       title: 'prj-name',
-      twits: comments,
+      twit: post,
+      comments: comments
     });
-
   } catch (err) {
     console.error(err);
     next(err);
   }
 });
 
-router.post('/:id/comment', isLoggedIn, async (req, res, next) => {
+const upload3 = multer();
+router.post('/:id/comment', isLoggedIn, upload3.none(), async (req, res, next) => {
   try {
     const post = await Post.findOne({ where: { id: req.params.id } });
     if (!post) return res.status(404).send('포스트가 존재하지 않습니다.');
@@ -144,18 +150,20 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => {
       UserId: req.user.id,
       content: req.body.content,
     });
-    const comment = await Comment.findOne({
+    const comments = await Comment.findAll({
       where: {
-        id: newComment.id,
+        PostId: req.params.id,
       },
       include: {
         model: User,
         attributes: ['id', 'nick'],
       },
+      order: [['createdAt', 'DESC']],
     });
-    res.render('main', {
+    res.render('twit', {
       title: 'prj-name',
-      twits: comment,
+      twit: post,
+      comments: comments
     });
   } catch (err) {
     console.error(err);

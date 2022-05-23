@@ -12,10 +12,17 @@
             <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
             {% endif %}
         </div>
-        <div></div>
+        <div class="new-comment">
+            <form id="comment-form" action="/post/{{twit.id}}/comment" method="post" enctype="multipart/form-data">
+                <div class="input-group">
+                    <textarea id="comment" name="content" maxlength="140"></textarea>
+                    <button id="comment-btn" type="submit" class="btn">등록</button>
+                </div>
+            </form>
+        </div>
         <div class="comments">
             {% for comment in comments %}
-            <div class="comment">
+            <div class="comment" style="border: 1px solid black; margin-bottom: 5px;">
                 <input type="hidden" value="{{comment.User.id}}" class="comment-user-id">
                 <input type="hidden" value="{{comment.id}}" class="comment-id">
                 <div class="comment-author">{{comment.User.nick}}</div>
