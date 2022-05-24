@@ -188,7 +188,13 @@ router.get('/:id', async (req, res, next) => {
 const upload3 = multer();
 router.post('/:id/comment', isLoggedIn, upload3.none(), async (req, res, next) => {
   try {
-    const post = await Post.findOne({ where: { id: req.params.id } });
+    const post = await Post.findOne({
+      where: { id: req.params.id },
+      include: {
+        model: User,
+        attributes: ['id', 'nick'],
+      },
+    });
     if (!post) return res.status(404).send('포스트가 존재하지 않습니다.');
     const newComment = await Comment.create({
       PostId: req.params.id,
@@ -208,8 +214,10 @@ router.post('/:id/comment', isLoggedIn, upload3.none(), async (req, res, next) =
     res.render('detail', {
       title: 'prj-name',
       twit: post,
-      comments: comments
+      comments: comments,
+      
     });
+    console.log(post)
   } catch (err) {
     console.error(err);
     next(err);
