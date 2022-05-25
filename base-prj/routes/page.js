@@ -68,9 +68,6 @@ router.get('/', async (req, res, next) => {
         through: 'PostLike'
       },
     ],
-      where: {
-        flag: true,
-      },
       order: [['createdAt', 'DESC']],
     });
     res.render('main', {

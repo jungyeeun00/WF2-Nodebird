@@ -78,7 +78,7 @@
                 const twitId = tag.parentNode.querySelector('.twit-id').value;
                 if (userId === myId.value) {
                     if (confirm('게시물을 삭제하시겠습니까?')) {
-                        axios.get(`/post/${twitId}/delete`)
+                        axios.delete(`/post/${twitId}`)
                         .then(() => {
                             window.location = document.referrer;
                         })

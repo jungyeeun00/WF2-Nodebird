@@ -109,9 +109,8 @@ router.post('/:id', isLoggedIn, upload2.none(), async (req, res, next) => {
   }
 });
 
-router.get('/:id/delete', isLoggedIn, async (req, res, next) => {
-  try {
-    post = await Post.findOne({ where: { id: req.params.id } });
+router.delete('/:id', isLoggedIn, async (req, res, next) => {
+  post = await Post.findOne({ where: { id: req.params.id } });
     hashtags = post.content.match(/#[^\s#]*/g);
     if (hashtags) {
       const result = await Promise.all(
@@ -122,14 +121,12 @@ router.get('/:id/delete', isLoggedIn, async (req, res, next) => {
         }),
       );
       await post.removeHashtags(result.map(r => r[0]));
-    }
-    const result = await Post.update({
-      flag: false,
-      deletedAt: new Date(),
-    }, {
+  }
+  try {
+    const result = await Post.destroy({
       where: { id: req.params.id },
     });
-    res.redirect('/');
+    res.send('success');
   } catch (error) {
     console.error(error);
     next(error);
