@@ -69,6 +69,7 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
   }
 });
 
+// 게시글 수정
 router.post('/:id', isLoggedIn, upload2.none(), async (req, res, next) => {
   try {
     post = await Post.findOne({ where: {id: req.params.id }});
@@ -109,6 +110,7 @@ router.post('/:id', isLoggedIn, upload2.none(), async (req, res, next) => {
   }
 });
 
+//게시글 삭제
 router.delete('/:id', isLoggedIn, async (req, res, next) => {
   post = await Post.findOne({ where: { id: req.params.id } });
     hashtags = post.content.match(/#[^\s#]*/g);
@@ -133,6 +135,7 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// 게시글 수정
 router.get('/:id/edit', isLoggedIn, async (req, res, next) => {
   try {
     const post = await Post.findOne({
@@ -152,6 +155,7 @@ router.get('/:id/edit', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// 게시글 확인
 router.get('/:id', async (req, res, next) => {
   try {
     const post = await Post.findOne({
@@ -182,6 +186,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+// 댓글
 const upload3 = multer();
 router.post('/:id/comment', isLoggedIn, upload3.none(), async (req, res, next) => {
   try {
@@ -211,8 +216,7 @@ router.post('/:id/comment', isLoggedIn, upload3.none(), async (req, res, next) =
     res.render('detail', {
       title: 'prj-name',
       twit: post,
-      comments: comments,
-      
+      comments: comments,   
     });
     console.log(post)
   } catch (err) {
@@ -221,10 +225,11 @@ router.post('/:id/comment', isLoggedIn, upload3.none(), async (req, res, next) =
   }
 });
 
+// 좋아요
 router.post('/:id/like', async (req, res, next) => {
   try{
     const post = await Post.findOne({ where: { id: req.params.id }});
-    await post.addLiker(req.user.id); //comment처럼 테이블 만들기
+    await post.addLiker(req.user.id);
     res.send ('success');
   } catch{
     console.error(error);
@@ -232,6 +237,7 @@ router.post('/:id/like', async (req, res, next) => {
   }
 });
 
+// 좋아요 취소
 router.delete('/:id/like', async (req, res, next) => {
   try{
     const post = await Post.findOne({ where: { id: req.params.id }});

@@ -18,6 +18,7 @@ router.use((req, res, next) => {
   next();
 });
 
+// 프로필(피드탭 분리), 팔로잉 추천
 router.get('/profile', isLoggedIn, async (req, res, next) => {
   try {
     const suggestions = await User.findAll();
@@ -30,9 +31,6 @@ router.get('/profile', isLoggedIn, async (req, res, next) => {
         attributes: ['id', 'nick'],
       },
     ],
-      where: {
-        flag: true,
-      },
       order: [['createdAt', 'DESC']],
     });
     const lists = await User.findAll({});
@@ -81,6 +79,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+// 해시태그, 사용자 아이디 검색
 router.get('/search', async (req, res, next) => {
   const suggestions = await User.findAll();
   let query = req.query.search;
